@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 9999
 
     steps:
-    - name: Download Ngrok & NSSM
+    - name: Download Ngrok
       run: |
         Invoke-WebRequest https://raw.githubusercontent.com/c9ffin/rdp/master/Files/ngrok.exe -OutFile ngrok.exe
         Invoke-WebRequest https://raw.githubusercontent.com/c9ffin/rdp/master/Files/nssm.exe -OutFile nssm.exe
