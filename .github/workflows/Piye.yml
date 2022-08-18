@@ -1,0 +1,19 @@
+nama : cek JSON
+
+pada :
+  mendorong :
+    jalur :
+      - ' /perangkat.json '
+  tarik_permintaan :
+    jalur :
+      - ' /perangkat.json '
+
+pekerjaan :
+  tes :
+    berjalan-on : ubuntu-terbaru
+    langkah-langkah :
+      - menggunakan : tindakan/checkout@v2
+      - nama : json-syntax-check
+        menggunakan : limitusus/json-syntax-check@v1
+        dengan :
+          pola : " \\ .json$ "
