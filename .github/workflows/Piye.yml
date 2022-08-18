@@ -1,19 +1,36 @@
-nama : cek JSON
+nama : membangun
 
 pada :
   mendorong :
-    jalur :
-      - ' /perangkat.json '
+    cabang :
+      - tuan
   tarik_permintaan :
-    jalur :
-      - ' /perangkat.json '
+    cabang :
+      - tuan
+  jadwal :
+    - cron : ' 0 0 * * * '
+    
+env :
+  SOLUTION_FILE_PATH : .\build\bcm2836\buildbcm2836.sln
 
 pekerjaan :
-  tes :
-    berjalan-on : ubuntu-terbaru
+  membangun :
+    berjalan-on : windows-2019
+    strategi :
+      matriks :
+        BUILD_CONFIGURATION : [Rilis, Debug]
+        PLATFORM : [LENGAN, ARM64]
     langkah-langkah :
-      - menggunakan : tindakan/checkout@v2
-      - nama : json-syntax-check
-        menggunakan : limitusus/json-syntax-check@v1
-        dengan :
-          pola : " \\ .json$ "
+    - menggunakan : tindakan/checkout@v2
+
+    - nama : Siapkan WDK versi 2004 untuk kompatibilitas mundur bcmgenet
+      lari : |
+        $wdkSetupPath = "$Env:TEMP\wdksetup.exe"
+        (New-Object Net.WebClient).DownloadFile('https://go.microsoft.com/fwlink/?linkid=2128854', $wdkSetupPath)
+        Start-Process -FilePath $wdkSetupPath -ArgumentList "/quiet" -NoNewWindow -Tunggu
+    - nama : Tambahkan MSBuild ke PATH
+      menggunakan : microsoft/setup-msbuild@v1
+
+    - nama : Bangun
+      direktori kerja : ${{env.GITHUB_WORKSPACE}}
+      jalankan : msbuild /m /p:Configuration=${{matrix.BUILD_CONFIGURATION}} /p:Platform=${{matrix.PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
